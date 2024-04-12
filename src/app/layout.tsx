@@ -1,8 +1,22 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import Head from 'next/head'
+import Link from 'next/link';
+import { convergence, pacifico } from "../ui/fonts";
 import "./globals.css";
+import stylesHome from "./home.module.css";
 
-const inter = Inter({ subsets: ["latin"] });
+//Material UI
+import Button from '@mui/material/Button';
+import {  ThemeProvider } from '@mui/material/styles';
+import theme from '../ui/theme';
+
+
+
+
+const links = [
+  {text: 'Map', uri: '/map'},
+  {text: 'Records', uri: '/record'}
+]
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -16,7 +30,33 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <Head>
+        <title>SuperWeather</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
+      </Head>
+      <ThemeProvider theme={theme}>
+      <body>
+        <header className={stylesHome.header}>
+          <div className={stylesHome.logo}>
+            <h1 className={`${pacifico.className} antialiased ${stylesHome.logoText}`}>SuperWeather</h1>
+          </div>
+        </header>
+        <nav className={stylesHome.navbar}>
+          {links.map((link, key)=>{
+            return(
+            <Link className={stylesHome.linkBtn} href={link.uri}>
+              <Button key={key} className={`${convergence.className} antialiased ${stylesHome.navButtons}` } variant="outlined">
+                {link.text}
+              </Button>
+            </Link>)
+          })}
+        </nav>
+        <section className={stylesHome.content}>
+          {children}
+        </section>
+        <footer></footer>
+      </body>
+      </ThemeProvider>
     </html>
   );
 }
